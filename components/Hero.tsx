@@ -31,7 +31,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-zen-ivory">
+ <div className="relative min-h-screen flex items-start lg:items-center justify-center pt-28 overflow-hidden bg-zen-ivory">
       {/* Background Zen Gradient */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[120vw] bg-zen-beige rounded-full opacity-30 blur-[150px] -z-10 animate-slow-zoom"></div>
       
