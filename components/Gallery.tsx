@@ -8,12 +8,15 @@ const Gallery: React.FC = () => {
   const [selectedArt, setSelectedArt] = useState<Artwork | null>(null);
   const [showMagnifier, setShowMagnifier] = useState(false);
   const [magnifierPos, setMagnifierPos] = useState({ x: 0, y: 0, bgX: 0, bgY: 0 });
+  const [showPriceForm, setShowPriceForm] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setSelectedArt(null);
+        setShowPriceForm(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -156,7 +159,12 @@ const Gallery: React.FC = () => {
                   </span>
                   <div className="absolute inset-0 bg-zen-gold translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
                 </button>
-                <button className="px-10 py-4 border border-zen-stone/20 text-zen-stone hover:border-zen-gold hover:text-gold transition-all text-xs uppercase tracking-widest">
+
+                {/* زر Demande de Prix الجديد */}
+                <button
+                  onClick={() => setShowPriceForm(true)}
+                  className="px-10 py-4 border border-zen-stone/20 text-zen-stone hover:border-zen-gold hover:text-zen-gold transition-all text-xs uppercase tracking-widest"
+                >
                   Demande de Prix
                 </button>
               </div>
@@ -227,6 +235,54 @@ const Gallery: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Modal Demande de Prix */}
+      {showPriceForm && (
+        <div
+          className="fixed inset-0 z-[120] bg-black/80 backdrop-blur-xl flex items-center justify-center"
+          onClick={() => setShowPriceForm(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-[#f5f2ec] max-w-md w-full p-10 shadow-2xl space-y-6 animate-fade-in"
+          >
+            <h4 className="text-2xl font-serif italic text-zen-stone">Demande de Prix</h4>
+
+            <input
+              placeholder="Nom complet"
+              className="w-full border p-3"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            />
+            <input
+              placeholder="Email"
+              className="w-full border p-3"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            />
+            <textarea
+              placeholder="Message"
+              className="w-full border p-3 h-32"
+              value={formData.message}
+              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+            />
+
+            <button
+              onClick={() => {
+                const text = `Bonjour, je souhaite connaître le prix de l’œuvre "${currentArt.title}" (${currentArt.year}).\nNom: ${formData.name}\nEmail: ${formData.email}\nMessage: ${formData.message}`;
+                const encoded = encodeURIComponent(text);
+                window.open(`https://wa.me/212636589124?text=${encoded}`, '_blank');
+                setShowPriceForm(false);
+                setFormData({ name: '', email: '', message: '' });
+              }}
+              className="w-full bg-zen-stone text-white py-3 uppercase tracking-widest text-xs"
+            >
+              Envoyer via WhatsApp
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
